@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title><%= title %></title>
+    <style>
+      <% inline "./src/templates/styles.css" %>
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1><%= title %></h1>
+    </header>
+
+    <% if section %>
+      <h1><a href="/status">&larr;</a><%= section.name %></h1>
+      <div class=content>
+        <% section.render_full io %>
+      </div>
+    <% else %>
+      <div class=sections>
+        <% @sections.each do |section| %>
+          <div class=section>
+            <h1 class=section-title>
+              <a href="/status?view=<%= section.class.name %>">
+                <%= section.name %>
+              </a>
+            </h1>
+            <div class=content>
+              <% section.render io %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </body>
+</html>

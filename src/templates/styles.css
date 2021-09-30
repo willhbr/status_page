@@ -1,0 +1,57 @@
+body {
+  max-width: 1000px;
+  padding: 5px;
+  margin: auto;
+  font-family: Helvetica, sans-serif;
+}
+
+.section {
+  background: #eee;
+  margin: 0.5%;
+  padding: 5px;
+  border-radius: 10px;
+  float: left;
+}
+
+.section-title {
+  margin-top: 0px;
+  font-size: 1.4em;
+}
+
+h1 a {
+  text-decoration: none;
+}
+
+.warn {
+  background: #ff9a42;
+}
+
+.error {
+  background: #911414;
+  color: #eee;
+}
+
+.fatal {
+  background: black;
+  color: #eee;
+}
+
+header {
+  text-align: center;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+.section {
+  width: 98%;
+}
+
+@media (min-width: 1000px) {
+  .section {
+    width: 48%;
+    height: 10vw;
+    overflow: scroll;
+  }
+}
