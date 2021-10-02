@@ -4,6 +4,7 @@ require "ecr"
 
 require "./section"
 require "./default_pages"
+require "./http_handler"
 
 module StatusPage
 end

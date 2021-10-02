@@ -6,7 +6,7 @@ struct StatusPage::HTMLBuilder
     def row(**args)
       @io << "<tr"
       args.each do |k, v|
-        @io << ' ' << k << "=\"" << HTML.escape(v) << '"'
+        @io << ' ' << k << "=\"" << HTML.escape(v.to_s) << '"'
       end
       @io << '>'
       yield
@@ -24,7 +24,7 @@ struct StatusPage::HTMLBuilder
       def {{ tag.id }}(**args)
         @io << "<{{ tag.id }}"
         args.each do |k, v|
-          @io << ' ' << k << "=\"" << HTML.escape(v) << '"'
+          @io << ' ' << k << "=\"" << HTML.escape(v.to_s) << '"'
         end
         @io << '>'
         yield
@@ -32,7 +32,7 @@ struct StatusPage::HTMLBuilder
       end
 
       def {{ tag.id }}(content, **args)
-        {{ tag.id }}(**args) { @io << HTML.escape(content) }
+        {{ tag.id }}(**args) { @io << HTML.escape(content.to_s) }
       end
     {% end %}
   end

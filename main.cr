@@ -8,8 +8,10 @@ end
 
 StatusPage::Handler.add_section StatusPage::ProgramInfo.new
 StatusPage::Handler.add_section log_catcher
+http = StatusPage::HTTPSection.new
+StatusPage::Handler.add_section http
 
-server = HTTP::Server.new [StatusPage::Handler.handler] do |context|
+server = HTTP::Server.new [http, StatusPage::Handler.handler] do |context|
   context.response.content_type = "text/plain"
   context.response.print "Hello world!"
   Log.debug { context.request }
