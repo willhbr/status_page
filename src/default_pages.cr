@@ -1,3 +1,5 @@
+require "redstone"
+
 module StatusPage
   class LogSection < Log::Backend
     include Section
@@ -34,10 +36,12 @@ module StatusPage
   struct ProgramInfo
     include Section
 
-    BUILT_ON   = Time.unix({{ `date +%s`.strip + "_i64" }})
-    STARTED_AT = Time.utc
-    BUILT_BY   = {{ env("USER") }}
-    BUILD_HOST = {{ `hostname`.stringify }}
+    BUILT_ON     = Time.unix({{ `date +%s`.strip + "_i64" }})
+    STARTED_AT   = Time.utc
+    BUILT_BY     = {{ env("USER") }}
+    BUILD_HOST   = {{ `hostname`.stringify }}
+    RUNNING_AS   = `whoami`.strip
+    RUNNING_HOST = `hostname`.strip
 
     def self.to_s(io)
       {% begin %}
@@ -60,8 +64,11 @@ module StatusPage
           end
         end
         table do
-          kv "Built:", "at #{ProgramInfo::BUILT_ON} (Crystal #{Crystal::VERSION}) by #{ProgramInfo::BUILT_BY} on #{ProgramInfo::BUILD_HOST}"
-          kv "Started at:", "#{ProgramInfo::STARTED_AT} (up #{Time.utc - ProgramInfo::STARTED_AT})"
+          kv "Built:", "at #{BUILT_ON} (Crystal #{Crystal::VERSION}) by #{BUILT_BY} on #{BUILD_HOST}"
+          kv "Started at:", "#{STARTED_AT} (up #{Time.utc - STARTED_AT})"
+          kv "Running as:", "#{RUNNING_AS} on #{RUNNING_HOST}"
+          stats = GC.stats
+          kv "GC:", "Free: #{stats.free_bytes.count_bytes}, total: #{stats.total_bytes.count_bytes}, since GC: #{stats.bytes_since_gc.count_bytes}"
         end
       end
     end
