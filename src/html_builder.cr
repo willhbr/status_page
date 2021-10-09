@@ -13,6 +13,22 @@ struct StatusPage::HTMLBuilder
       @io << "</tr>"
     end
 
+    def header(*titles)
+      row do
+        titles.each do |title|
+          th title
+        end
+      end
+    end
+
+    def rows(iter, **args)
+      iter.each do |item|
+        row **args do
+          yield item
+        end
+      end
+    end
+
     def kv(key, value, **args)
       row **args do
         th key
@@ -56,8 +72,12 @@ struct StatusPage::HTMLBuilder
     @io << "</div>"
   end
 
-  def table(name : String? = nil, &block)
-    @io << "<table>"
+  def table(name : String? = nil, **args, &block)
+    @io << "<table"
+    args.each do |k, v|
+      @io << ' ' << k << "=\"" << HTML.escape(v.to_s) << '"'
+    end
+    @io << '>'
     if n = name
       @io << "<caption>" << HTML.escape(n) << "</caption>"
     end

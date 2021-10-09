@@ -26,9 +26,14 @@ h1 a {
   background: #ff9a42;
 }
 
-.error {
+.failure, .error {
   background: #911414;
   color: #eee;
+}
+
+.success {
+  background: green;
+  color: black;
 }
 
 .fatal {

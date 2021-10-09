@@ -36,7 +36,7 @@ class StatusPage::Handler
   end
 
   macro inline(path)
-    ECR.embed {{ path }}, __mAgiC_iO__
+    ECR.embed "#{__DIR__}/#{ {{ path }} }", __mAgiC_iO__
   end
 
   private def respond_with_status(context)
@@ -46,6 +46,6 @@ class StatusPage::Handler
     end
     context.response.content_type = "text/html"
     io = __mAgiC_iO__ = context.response.output
-    ECR.embed "./src/templates/index.html", io
+    ECR.embed "#{__DIR__}/templates/index.html", io
   end
 end
