@@ -4,13 +4,16 @@ module StatusPage
   class LogSection < Log::Backend
     include Section
 
-    def initialize(size = 1000)
+    def initialize(capacity = 1000)
       super(Log::DispatchMode::Sync)
-      @messages = Deque(Log::Entry).new size
+      @buffer = CircularBuffer(Log::Entry).new capacity
+      @lock = Mutex.new
     end
 
     def write(entry)
-      @messages.push entry
+      @lock.synchronize do
+        @buffer.push entry
+      end
     end
 
     def name
@@ -21,10 +24,12 @@ module StatusPage
       html io do
         div class: "mono" do
           table do
-            @messages.each do |entry|
-              row class: entry.severity.to_s.downcase do
-                td Time::Format::ISO_8601_DATE_TIME.format(entry.timestamp)
-                td entry.message
+            @lock.synchronize do
+              @buffer.each do |entry|
+                row class: entry.severity.to_s.downcase do
+                  td Time::Format::ISO_8601_DATE_TIME.format(entry.timestamp)
+                  td entry.message
+                end
               end
             end
           end
@@ -45,10 +50,10 @@ module StatusPage
 
     def self.to_s(io)
       {% begin %}
-      {% for c in @type.constants %}
-        io << {{ c.stringify }} << " = " << {{ c }} << '\n'
+        {% for c in @type.constants %}
+          io << {{ c.stringify }} << " = " << {{ c }} << '\n'
+        {% end %}
       {% end %}
-    {% end %}
     end
 
     def name

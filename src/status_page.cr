@@ -20,6 +20,7 @@ class StatusPage::Handler
   end
 
   private def initialize
+    @sections << StatusPage::ProgramInfo.new
   end
 
   def self.add_section(section)
