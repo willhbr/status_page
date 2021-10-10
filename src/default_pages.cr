@@ -1,5 +1,14 @@
 require "redstone"
 
+class Log::Builder
+  def status_page(severity = Severity::Info, match = "*", skip_add = false)
+    backend = StatusPage::LogSection.new
+    StatusPage::Handler.add_section backend unless skip_add
+    self.bind(match, severity, backend)
+    backend
+  end
+end
+
 module StatusPage
   class LogSection < Log::Backend
     include Section
