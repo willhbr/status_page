@@ -1,4 +1,5 @@
-require "redstone"
+require "redstone/stdlib"
+require "redstone/os"
 
 class Log::Builder
   def status_page(severity = Severity::Info, match = "*", skip_add = false)

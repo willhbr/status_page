@@ -53,6 +53,10 @@ header {
   width: 98%;
 }
 
+table {
+  width: 100%;
+}
+
 @media (min-width: 1000px) {
   .section {
     width: 48%;

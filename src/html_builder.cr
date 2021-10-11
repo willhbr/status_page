@@ -51,6 +51,10 @@ struct StatusPage::HTMLBuilder
         {{ tag.id }}(**args) { @io << HTML.escape(content.to_s) }
       end
     {% end %}
+
+    def get_table
+      self
+    end
   end
 
   def initialize(@io : IO)
