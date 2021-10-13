@@ -36,14 +36,28 @@ struct StatusPage::HTMLBuilder
       end
     end
 
+    def link(href : String)
+      @io << "<a href=\"" << HTML.escape(href) << "\">"
+      yield
+      @io << "</a>"
+    end
+
+    def link(content, href : String)
+      link href { escape content }
+    end
+
     {% for tag in {:td, :th} %}
-      def {{ tag.id }}(**args)
+      def {{ tag.id }}(link : String? = nil, **args)
         @io << "<{{ tag.id }}"
         args.each do |k, v|
           @io << ' ' << k << "=\"" << HTML.escape(v.to_s) << '"'
         end
         @io << '>'
-        yield
+        if l = link
+          link(href: l) { yield }
+        else
+          yield
+        end
         @io << "</{{ tag.id }}>"
       end
 
@@ -74,6 +88,20 @@ struct StatusPage::HTMLBuilder
     @io << '>'
     yield
     @io << "</div>"
+  end
+
+  def link(href : String)
+    @io << "<a href=\"" << HTML.escape(href) << "\">"
+    yield
+    @io << "</a>"
+  end
+
+  def link(content, href : String)
+    link href { escape content }
+  end
+
+  def get_html
+    self
   end
 
   def table(name : String? = nil, **args, &block)
