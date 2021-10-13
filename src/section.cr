@@ -8,7 +8,7 @@ module StatusPage
 
     def page_url(**params)
       String.build do |io|
-        io << "/status?view=" << self.class.name
+        io << "status?view=" << self.class.name
         params.each do |name, value|
           io << '&' << name << '=' << URI.encode(value)
         end
