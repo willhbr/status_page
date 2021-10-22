@@ -38,6 +38,7 @@ module StatusPage
               @buffer.each do |entry|
                 row class: entry.severity.to_s.downcase do
                   td Time::Format::ISO_8601_DATE_TIME.format(entry.timestamp)
+                  td entry.severity
                   td entry.message
                 end
               end
@@ -79,7 +80,7 @@ module StatusPage
           end
         end
         table do
-          kv "Built:", "at #{BUILT_ON} (Crystal #{Crystal::VERSION}) by #{BUILT_BY} on #{BUILD_HOST}"
+          kv "Built:", "at #{BUILT_ON} (#{Time.utc - BUILT_ON} ago) (Crystal #{Crystal::VERSION}) by #{BUILT_BY} on #{BUILD_HOST}"
           kv "Started at:", "#{STARTED_AT} (up #{Time.utc - STARTED_AT})"
           kv "Running as:", "#{RUNNING_AS} on #{System.hostname}"
           stats = GC.stats
