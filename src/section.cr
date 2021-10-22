@@ -24,5 +24,9 @@ module StatusPage
     def render_full(params : HTTP::Params, io : IO)
       render(io)
     end
+
+    def register!
+      StatusPage::Handler.add_section self
+    end
   end
 end

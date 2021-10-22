@@ -56,6 +56,7 @@ module StatusPage
     BUILT_BY   = {{ env("USER") }}
     BUILD_HOST = {{ `hostname`.stringify }}
     RUNNING_AS = `whoami`.strip
+    ARGS       = ARGV
 
     def self.to_s(io)
       {% begin %}
@@ -73,7 +74,7 @@ module StatusPage
       html io do
         div class: "mono" do
           escape PROGRAM_NAME, " "
-          ARGV.each do |arg|
+          ARGS.each do |arg|
             escape Process.quote(arg), " "
           end
         end

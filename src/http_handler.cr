@@ -2,42 +2,58 @@ class StatusPage::HTTPSection
   include Section
   include HTTP::Handler
 
+  class ReqInfo
+    getter path : String
+    getter method : String
+    getter request_size : Int32
+    getter response_size : Int32
+    getter start_time : Time
+    getter duration : Time::Span
+    getter status : HTTP::Status
+
+    def initialize(@path, @method, @request_size, @response_size, @start_time, @duration, @status)
+    end
+  end
+
   def name
     "HTTP Requests"
   end
 
-  class RequestInfo
-    property count : UInt32 = 0
-    property mean_latency_ms : Float32 = 0.0
-  end
-
-  @requests = Hash({String, HTTP::Status}, RequestInfo).new { |h, k| h[k] = RequestInfo.new }
+  @requests = Array(ReqInfo).new
 
   def call(context)
-    latency = Time.measure do
+    start = Time.utc
+    duration = Time.measure do
       call_next(context)
     end
-    status = context.response.status
-    info = @requests[{context.request.path, status}]
-    info.count += 1
-    info.mean_latency_ms = (info.mean_latency_ms * (info.count - 1) + latency.milliseconds) / info.count
+    resp_size = 0
+    # This is totes not a horrible hack
+    if io = context.response.output.as?(HTTP::Server::Response::Output)
+      resp_size = io.@out_count
+    end
+    info = ReqInfo.new(
+      context.request.path, context.request.method,
+      context.request.content_length.try(&.to_i) || 0,
+      resp_size,
+      start,
+      duration,
+      context.response.status
+    )
+    @requests << info
   end
 
   def render(io : IO)
     html io do
       table do
-        row do
-          th "Path"
-          th "Status"
-          th "Count"
-          th "Mean Latency"
-        end
-        @requests.each do |(path, status), info|
+        header "Path", "Status", "Req bytes", "Resp bytes", "Time", "Duration"
+        @requests.each do |req|
           row do
-            th path
-            td status
-            td info.count
-            td info.mean_latency_ms
+            th "#{req.method}: #{req.path}"
+            td req.status
+            td req.request_size.count_bytes
+            td req.response_size.count_bytes
+            td req.start_time
+            td req.duration
           end
         end
       end
