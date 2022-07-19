@@ -16,7 +16,13 @@
     <% if section %>
       <h1><a href="status">&larr;</a><%= section.name %></h1>
       <div class=content>
-        <% section.render_full context.request.query_params, io %>
+        <% begin %>
+          <% section.render_full context.request.query_params, io %>
+        <% rescue error %>
+          <pre class="error">
+            <%= HTML.escape error.to_s %>
+          </pre>
+        <% end %>
       </div>
     <% else %>
       <div class=sections>
@@ -27,9 +33,15 @@
                 <%= section.name %>
               </a>
             </h1>
-            <div class=content>
-              <% section.render io %>
-            </div>
+            <% begin %>
+              <div class=content>
+                <% section.render io %>
+              </div>
+            <% rescue error %>
+              <pre class="error">
+                <%= HTML.escape error.to_s %>
+              </pre>
+            <% end %>
           </div>
         <% end %>
       <% end %>
