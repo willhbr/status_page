@@ -1,5 +1,4 @@
-require "redstone/stdlib"
-require "redstone/os"
+require "geode"
 
 class Log::Builder
   def status_page(severity = Severity::Info, match = "*", skip_add = false)
@@ -16,7 +15,7 @@ module StatusPage
 
     def initialize(capacity = 1000)
       super(Log::DispatchMode::Sync)
-      @buffer = CircularBuffer(Log::Entry).new capacity
+      @buffer = Geode::CircularBuffer(Log::Entry).new capacity
       @lock = Mutex.new
     end
 
@@ -86,7 +85,6 @@ module StatusPage
           stats = GC.stats
           kv "GC:", "Free: #{stats.free_bytes.count_bytes}, total: #{stats.total_bytes.count_bytes}, since GC: #{stats.bytes_since_gc.count_bytes}"
           kv "Load avg: ", File.read("/proc/loadavg")
-          kv "Free:", System.meminfo
         end
       end
     end

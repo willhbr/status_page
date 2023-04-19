@@ -9,5 +9,5 @@ crystal: 1.1.1
 license: MIT
 
 dependencies:
-  # redstone:
-  #   path: ../redstone
+  geode:
+    github: willhbr/geode
