@@ -56,7 +56,20 @@ module StatusPage
     BUILT_BY   = {{ env("USER") }}
     BUILD_HOST = {{ `hostname`.stringify }}
     RUNNING_AS = `whoami`.strip
+    HOST_OS    = self.host_os
     ARGS       = ARGV
+
+    def self.host_os
+      File.open("/etc/os-release") do |file|
+        while line = file.gets
+          if line.starts_with? "PRETTY_NAME="
+            value = line.lchop "PRETTY_NAME="
+            return String.from_json(value)
+          end
+        end
+      end
+      return "unknown"
+    end
 
     def self.to_s(io)
       {% begin %}
@@ -81,7 +94,7 @@ module StatusPage
         table do
           kv "Built:", "at #{BUILT_ON} (#{Time.utc - BUILT_ON} ago) (Crystal #{Crystal::VERSION}) by #{BUILT_BY} on #{BUILD_HOST}"
           kv "Started at:", "#{STARTED_AT} (up #{Time.utc - STARTED_AT})"
-          kv "Running as:", "#{RUNNING_AS} on #{System.hostname}"
+          kv "Running as:", "#{RUNNING_AS} on #{System.hostname} (#{HOST_OS})"
           stats = GC.stats
           kv "GC:", "Free: #{stats.free_bytes.count_bytes}, total: #{stats.total_bytes.count_bytes}, since GC: #{stats.bytes_since_gc.count_bytes}"
           kv "Load avg: ", File.read("/proc/loadavg")
