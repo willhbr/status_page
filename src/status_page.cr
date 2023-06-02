@@ -2,34 +2,32 @@ require "http"
 require "log"
 require "ecr"
 
-require "./section"
-require "./default_pages"
-require "./http_handler"
+require "./status_page/*"
 
 module StatusPage
+  @@instance : Handler? = nil
+
+  def self.default_handler
+    @@instance ||= StatusPage::Handler.new("/status")
+  end
 end
 
 class StatusPage::Handler
   include HTTP::Handler
 
-  @@instance : Handler? = nil
   @sections = Array(Section).new
 
-  def self.handler
-    @@instance ||= new
-  end
-
-  private def initialize
+  def initialize(@path : String)
     @sections << StatusPage::ProgramInfo.new
   end
 
-  def self.add_section(section)
-    handler.@sections << section
+  def add_section(section)
+    @sections << section
   end
 
   def call(context)
     case context.request.path
-    when "/status"
+    when @path
       respond_with_status context
     else
       call_next context

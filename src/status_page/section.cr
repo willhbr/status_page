@@ -26,7 +26,7 @@ module StatusPage
     end
 
     def register!
-      StatusPage::Handler.add_section self
+      StatusPage.default_handler.add_section self
     end
   end
 end
