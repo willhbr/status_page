@@ -9,12 +9,16 @@ end
 qs = StatusPage::QuickSection.new "Quick"
 qs.register!
 
-Log.setup do |l|
-  l.status_page
+client = HTTP::Client::Inspectable.new "google.com"
+client.register!
+spawn do
+  sleep 10.seconds
+  Log.info { client.get("/status").body.size }
 end
 
-1000.times do |i|
-  Log.info { " things #{i}" }
+Log.setup do |l|
+  l.status_page
+  l.stderr
 end
 
 qs.value("Random") { Random.rand.to_s }
