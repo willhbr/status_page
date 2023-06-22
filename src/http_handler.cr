@@ -1,15 +1,25 @@
-require "./http"
-require "http/server/handler"
-
 class StatusPage::HTTPSection
   include Section
   include HTTP::Handler
+
+  class ReqInfo
+    getter path : String
+    getter method : String
+    getter request_size : Int32
+    getter response_size : Int32
+    getter start_time : Time
+    getter duration : Time::Span
+    getter status : HTTP::Status
+
+    def initialize(@path, @method, @request_size, @response_size, @start_time, @duration, @status)
+    end
+  end
 
   def name
     "HTTP Requests"
   end
 
-  @requests = Geode::CircularBuffer(StatusPage::HTTPReqInfo).new(200)
+  @requests = Array(ReqInfo).new
 
   def call(context)
     start = Time.utc
@@ -30,7 +40,7 @@ class StatusPage::HTTPSection
     unless error.nil?
       status = HTTP::Status::INTERNAL_SERVER_ERROR
     end
-    info = HTTPReqInfo.new(
+    info = ReqInfo.new(
       context.request.path, context.request.method,
       context.request.content_length.try(&.to_i) || 0,
       resp_size,

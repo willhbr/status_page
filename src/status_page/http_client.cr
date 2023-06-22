@@ -2,9 +2,43 @@ require "http/client"
 require "geode"
 require "./http"
 
+class IOCounter < IO
+  getter read_size
+  getter write_size
+
+  def initialize(@wrapped : IO)
+    @read_size = 0
+    @write_size = 0
+  end
+
+  def reset
+    @read_size = 0
+    @write_size = 0
+  end
+
+  def read(slice : Bytes) : Int32
+    size = @wrapped.read(slice)
+    @read_size += size
+    size
+  end
+
+  def write(slice : Bytes) : Nil
+    @wrapped.write(slice)
+    @write_size += slice.size
+  end
+end
+
+# TODO split this into a status section that can handle multiple clients
 class HTTP::Client::Inspectable < HTTP::Client
   include StatusPage::Section
   @requests = Geode::CircularBuffer(StatusPage::HTTPReqInfo).new(200)
+
+  class TCPSocket
+    def self.new(*args)
+      sock = ::TCPSocket.new(*args)
+      IOCounter.new(sock)
+    end
+  end
 
   def name
     "HTTP::Client #{@host}:#{@port}"
@@ -13,8 +47,10 @@ class HTTP::Client::Inspectable < HTTP::Client
   def exec(request : HTTP::Request) : HTTP::Client::Response
     start = Time.utc
     error : Exception? = nil
-    response : HTTP::Client::Response? = nil
-    Log.info { request }
+    unless io = @io.as? IOCounter
+      @io = io = IOCounter.new(self.io)
+    end
+    io.reset
     response = super(request)
     duration = Time.utc - start
     # TODO fix
@@ -22,7 +58,7 @@ class HTTP::Client::Inspectable < HTTP::Client
     status = response.status
     info = StatusPage::HTTPReqInfo.new(
       request.path, request.method,
-      request.content_length.try(&.to_i) || 0,
+      io.write_size,
       resp_size,
       start,
       duration,
