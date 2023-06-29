@@ -56,3 +56,19 @@ header {
 table {
   width: 100%;
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: white;
+    background: black;
+  }
+  .section {
+    background: #333;
+  }
+  a {
+    color: cornflowerblue;
+  }
+  a:hover, a:visited {
+    color: aqua;
+  }
+}

@@ -26,9 +26,14 @@ class StatusPage::Handler
   end
 
   def call(context)
-    case context.request.path
-    when @path
-      respond_with_status context
+    path = context.request.path
+    if path.starts_with? @path
+      if path.ends_with? ".css"
+        context.response.content_type = "text/css"
+        ECR.embed "#{__DIR__}/templates/styles.css", context.response.output
+      else
+        respond_with_status context
+      end
     else
       call_next context
     end
