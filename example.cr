@@ -12,11 +12,14 @@ end
 qs = StatusPage::QuickSection.new "Quick"
 qs.register!
 
-client = HTTP::Client::Inspectable.new "google.com"
+client = HTTP::Client::Inspectable.new "willhbr.net"
 client.register!
 spawn do
-  sleep 10.seconds
-  Log.info { client.get("/status").body.size }
+  loop do
+    resp = client.get("/")
+    Log.info { resp }
+    sleep 14.seconds
+  end
 end
 
 Log.setup do |l|
