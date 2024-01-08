@@ -1,7 +1,10 @@
 require "./src/status_page"
 require "http/server"
 
-server = HTTP::Server.new([StatusPage.default_handler]) do |context|
+section = StatusPage::HTTPSection.new
+section.register!
+
+server = HTTP::Server.new([section, StatusPage.default_handler]) do |context|
   context.response.content_type = "text/plain"
   context.response.print "Hello world!"
 end
@@ -23,6 +26,6 @@ end
 
 qs.value("Random") { Random.rand.to_s }
 
-address = server.bind_tcp "0", 8080
+address = server.bind_tcp "0", 80
 puts "Listening on http://#{address}"
 server.listen

@@ -1,0 +1,5 @@
+FROM docker.io/crystallang/crystal:latest-alpine
+WORKDIR /src
+COPY shard.yml .
+RUN shards install
+ENTRYPOINT ["crystal", "run", "example.cr", "--error-trace", "--"]

@@ -18,7 +18,7 @@
           <% section.render_full context.request.query_params, io %>
         <% rescue error %>
           <pre class="error">
-            <%= HTML.escape error.to_s %>
+            <%= HTML.escape error.inspect_with_backtrace %>
           </pre>
         <% end %>
       </div>
@@ -37,7 +37,7 @@
               </div>
             <% rescue error %>
               <pre class="error">
-                <%= HTML.escape error.to_s %>
+                <%= HTML.escape error.inspect_with_backtrace %>
               </pre>
             <% end %>
           </div>

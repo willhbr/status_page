@@ -43,7 +43,15 @@ struct StatusPage::HTMLBuilder
     end
 
     def link(content, href : String)
-      link href { escape content }
+      link(href) do
+        escape content
+      end
+    end
+
+    def escape(*output)
+      output.each do |o|
+        @io << HTML.escape o
+      end
     end
 
     {% for tag in {:td, :th} %}

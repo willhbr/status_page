@@ -1,0 +1,16 @@
+images:
+  dev:
+    tag: status_page:dev-latest
+    from: Containerfile.dev
+
+containers:
+  dev:
+    name: status_page-dev
+    image: status_page:dev-latest
+    interactive: true
+    autoremove: true
+    bind_mounts:
+      src: /src/src
+      example.cr: /src/example.cr
+    ports:
+      0: 80
