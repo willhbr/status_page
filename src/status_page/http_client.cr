@@ -19,10 +19,10 @@ class HTTP::Client::Inspectable < HTTP::Client
       error = ex
     end
     duration = Time.utc - start
-    # TODO fix
     resp_size = 0
     if response
       status = response.status
+      resp_size = response.headers["Content-Length"].to_i
     else
       status = HTTP::Status::INTERNAL_SERVER_ERROR
     end
@@ -33,7 +33,7 @@ class HTTP::Client::Inspectable < HTTP::Client
       status
     )
     agg = StatusPage::Internal::HTTPReqAgg.new(
-      0,
+      request.content_length.try(&.to_i) || 0,
       resp_size,
       duration,
       start

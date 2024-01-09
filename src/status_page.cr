@@ -29,6 +29,24 @@ module StatusPage
       block.call context
     end
   end
+
+  def self.make_server(
+    handlers = [] of HTTP::Handler,
+    no_http = false
+  )
+    h = [] of HTTP::Handler
+    unless no_http
+      http = StatusPage::HTTPSection.new
+      http.register!
+      h << http
+    end
+    h << StatusPage.default_handler
+    h.concat(handlers)
+
+    HTTP::Server.new h do |context|
+      context.response.status = HTTP::Status::NOT_FOUND
+    end
+  end
 end
 
 class StatusPage::Handler
