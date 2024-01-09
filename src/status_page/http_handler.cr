@@ -20,7 +20,7 @@ class StatusPage::HTTPSection
       end
     end
     resp_size = 0
-    # This is totes not a horrible hack
+    # TODO: This is totes not a horrible hack
     if io = context.response.output.as?(HTTP::Server::Response::Output)
       resp_size = io.@out_count
     end

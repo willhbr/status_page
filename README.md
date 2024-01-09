@@ -1,6 +1,4 @@
-# status-handler
-
-TODO: Write a description here
+# Status Page
 
 ## Installation
 
@@ -8,8 +6,8 @@ TODO: Write a description here
 
    ```yaml
    dependencies:
-     status-handler:
-       github: your-github-user/status-handler
+     status_page:
+       github: willhbr/status_page
    ```
 
 2. Run `shards install`
@@ -17,23 +15,17 @@ TODO: Write a description here
 ## Usage
 
 ```crystal
-require "status-handler"
+require "status_page"
+
+server = StatusPage.make_server(MyHTTPHandler.new) do |context|
+  # your server logic here if you want
+end
 ```
-
-TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/status-handler/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
-## Contributors
-
-- [Will Richardson](https://github.com/your-github-user) - creator and maintainer
+1. Fork it (<https://github.com/willhbr/status_page/fork>)
+1. Create your feature branch (`git checkout -b my-new-feature`)
+1. Commit your changes (`git commit -am 'Add some feature'`)
+1. Push to the branch (`git push origin my-new-feature`)
+1. Create a new Pull Request
