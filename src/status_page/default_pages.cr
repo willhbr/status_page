@@ -110,8 +110,6 @@ module StatusPage
           kv "Built:", "at #{BUILT_ON} (#{Time.utc - BUILT_ON} ago) (Crystal #{Crystal::VERSION}) by #{BUILT_BY} on #{BUILD_HOST}"
           kv "Started at:", "#{STARTED_AT} (up #{Time.utc - STARTED_AT})"
           kv "Running as:", "#{RUNNING_AS} on #{System.hostname} (#{HOST_OS})"
-          stats = GC.stats
-          kv "GC:", "Free: #{stats.free_bytes.count_bytes}, total: #{stats.total_bytes.count_bytes}, since GC: #{stats.bytes_since_gc.count_bytes}"
           kv "Load avg: ", File.read("/proc/loadavg")
         end
       end

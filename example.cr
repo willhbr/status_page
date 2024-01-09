@@ -1,10 +1,7 @@
 require "./src/status_page"
 require "http/server"
 
-section = StatusPage::HTTPSection.new
-section.register!
-
-server = HTTP::Server.new([section, StatusPage.default_handler]) do |context|
+server = StatusPage.make_server do |context|
   context.response.content_type = "text/plain"
   context.response.print "Hello world!"
 end
