@@ -26,7 +26,7 @@ class StatusPage::Handler
   end
 
   macro inline(path)
-    ECR.embed "#{__DIR__}/#{ {{ path }} }", __mAgiC_iO__
+    ECR.embed "../#{ {{ path }} }", __mAgiC_iO__
   end
 
   private def respond_with_status(context)
