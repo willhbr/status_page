@@ -22,7 +22,7 @@ class HTTP::Client::Inspectable < HTTP::Client
     resp_size = 0
     if response
       status = response.status
-      resp_size = response.headers["Content-Length"].to_i
+      resp_size = response.headers["Content-Length"]?.try(&.to_i) || 0
     else
       status = HTTP::Status::INTERNAL_SERVER_ERROR
     end
