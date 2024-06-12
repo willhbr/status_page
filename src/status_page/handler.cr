@@ -16,6 +16,9 @@ class StatusPage::Handler
     if path.starts_with? @path
       if path.ends_with? ".css"
         context.response.content_type = "text/css"
+        {% if flag?(:release) %}
+          context.response.headers["Cache-Control"] = "max-age=604800"
+        {% end %}
         ECR.embed "#{__DIR__}/templates/styles.css", context.response.output
       else
         respond_with_status context

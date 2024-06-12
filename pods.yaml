@@ -11,6 +11,7 @@ containers:
     autoremove: true
     bind_mounts:
       src: /src/src
+      .cache: /root/.cache/crystal
       example.cr: /src/example.cr
     ports:
       0: 80
