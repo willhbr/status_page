@@ -13,6 +13,7 @@ module StatusPage
     RUNNING_AS = `whoami`.strip
     HOST_OS    = self.host_os
     ARGS       = ARGV
+    COMMIT     = {{ `sh -c '[ -e .git/HEAD ] && head -c 7 .git/HEAD' || echo 'unknown'`.stringify }}
 
     def self.host_os
       File.open("/etc/os-release") do |file|
@@ -50,7 +51,7 @@ module StatusPage
           kv "Built:", "at #{BUILT_ON} (#{Time.utc - BUILT_ON} ago) (Crystal #{Crystal::VERSION}) by #{BUILT_BY} on #{BUILD_HOST}"
           kv "Started at:", "#{STARTED_AT} (up #{Time.utc - STARTED_AT})"
           kv "Running as:", "#{RUNNING_AS} on #{System.hostname} (#{HOST_OS})"
-          kv "Load avg: ", File.read("/proc/loadavg")
+          kv "Build commit", COMMIT
         end
       end
     end
