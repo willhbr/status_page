@@ -17,12 +17,13 @@ module StatusPage::Internal
     end
 
     def +(other : HTTPReqAgg)
-      @request_size += other.request_size
-      @response_size += other.response_size
-      @duration += other.duration
-      @count += other.count
-      @time = {@time, other.time}.max
-      self
+      repl = dup
+      repl.request_size += other.request_size
+      repl.response_size += other.response_size
+      repl.duration += other.duration
+      repl.count += other.count
+      repl.time = {repl.time, other.time}.max
+      repl
     end
 
     def <=>(other)
