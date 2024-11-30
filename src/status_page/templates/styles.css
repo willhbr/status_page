@@ -1,48 +1,78 @@
 body {
-  max-width: 1000px;
-  padding: 5px;
+  max-width: 55em;
+  padding: 0.5em;
   margin: auto;
-  font-family: Helvetica, sans-serif;
+  font-family: system-ui, sans-serif;
 }
 
 .section {
-  background: #eee;
   margin: 0.5%;
-  padding: 5px;
-  border-radius: 10px;
-  float: left;
+  padding: 0.6em;
+  border-radius: 2px;
+  border: 2px solid grey;
 }
 
 .section-title {
   margin-top: 0px;
   font-size: 1.4em;
+  font-family: ui-rounded, system-ui, sans-serif;
 }
 
 h1 a {
   text-decoration: none;
 }
 
-.warn {
-  background: #ff9a42;
+.trace {
+  color: #444;
 }
-
-.failure, .error {
-  background: #911414;
-  color: #eee;
+.debug {
+  color: #308099;
 }
-
-.success {
-  background: green;
+.info {
   color: black;
 }
-
+.notice {
+  color #494211;
+}
+.warn {
+  color: #b77203;
+}
+.error {
+  color: #a00901
+}
 .fatal {
-  background: black;
-  color: #eee;
+  background: #a00901;
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .trace {
+    color: #ccc;
+  }
+  .debug {
+    color: #80c8ed;
+  }
+  .info {
+    color: white;
+  }
+  .notice {
+    color: #f7f2d4
+  }
+  .warn {
+    color: #f78c1b;
+  }
+  .error {
+    color: #e01c06;
+  }
+  .fatal {
+    background: #e01c06;
+    color: white;
+  }
 }
 
 header {
   text-align: center;
+  font-family: monospace;
 }
 
 .mono {
@@ -61,9 +91,6 @@ table {
   body {
     color: white;
     background: black;
-  }
-  .section {
-    background: #333;
   }
   a {
     color: cornflowerblue;

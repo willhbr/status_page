@@ -20,8 +20,12 @@ spawn do
 end
 
 Log.setup do |l|
-  l.status_page
+  l.status_page(Log::Severity::Debug)
   l.stderr
+end
+
+Log::Severity.each do |sev|
+  Log.log(sev) { "message at #{sev}" }
 end
 
 qs.value("Random") { Random.rand.to_s }

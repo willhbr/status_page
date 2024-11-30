@@ -15,7 +15,7 @@ containers:
       .cache: /root/.cache/crystal
       example.cr: /src/example.cr
     ports:
-      0: 80
+      1243: 80
     labels:
       endash.links:
         - name: Status
