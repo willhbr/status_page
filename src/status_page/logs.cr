@@ -46,10 +46,14 @@ module StatusPage
               @buffer.each_last(limit) do |entry|
                 row class: entry.severity.to_s.downcase do
                   td Time::Format::ISO_8601_DATE_TIME.format(entry.timestamp)
-                  if exception = entry.exception
-                    td "#{entry.message}\n#{exception.inspect_with_backtrace}"
-                  else
-                    td entry.message
+                  td do
+                    pre class: "logline" do
+                      if exception = entry.exception
+                        escape "#{entry.message}\n#{exception.inspect_with_backtrace}"
+                      else
+                        escape entry.message
+                      end
+                    end
                   end
                 end
               end

@@ -1,5 +1,47 @@
 struct StatusPage::HTMLBuilder
+  module HTMLNodes
+    def escape(*output)
+      output.each do |o|
+        @io << HTML.escape o
+      end
+    end
+
+    def node(name, **args)
+      @io << "<#{name}"
+      args.each do |k, v|
+        @io << ' ' << k << "=\"" << HTML.escape(v) << '"'
+      end
+      @io << '>'
+      yield
+      @io << "</#{name}>"
+    end
+
+    def div(**args)
+      node "div", **args do
+        yield
+      end
+    end
+
+    def pre(**args)
+      node "pre", **args do
+        yield
+      end
+    end
+
+    def link(href : String)
+      @io << "<a href=\"" << HTML.escape(href) << "\">"
+      yield
+      @io << "</a>"
+    end
+
+    def link(content, href : String)
+      link href { escape content }
+    end
+  end
+
   struct Table
+    include HTMLNodes
+
     def initialize(@io : IO)
     end
 
@@ -79,33 +121,9 @@ struct StatusPage::HTMLBuilder
     end
   end
 
+  include HTMLNodes
+
   def initialize(@io : IO)
-  end
-
-  def escape(*output)
-    output.each do |o|
-      @io << HTML.escape o
-    end
-  end
-
-  def div(**args)
-    @io << "<div"
-    args.each do |k, v|
-      @io << ' ' << k << "=\"" << HTML.escape(v) << '"'
-    end
-    @io << '>'
-    yield
-    @io << "</div>"
-  end
-
-  def link(href : String)
-    @io << "<a href=\"" << HTML.escape(href) << "\">"
-    yield
-    @io << "</a>"
-  end
-
-  def link(content, href : String)
-    link href { escape content }
   end
 
   def get_html

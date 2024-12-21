@@ -18,6 +18,10 @@ body {
   font-family: ui-rounded, system-ui, sans-serif;
 }
 
+pre.logline {
+  margin: 0;
+}
+
 h1 a {
   text-decoration: none;
 }
