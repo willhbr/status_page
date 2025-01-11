@@ -1,5 +1,9 @@
 # Status Page
 
+Simple modular status page for Crystal webservers.
+
+![screenshot of status page](https://github.com/willhbr/status_page/raw/main/status_page.webp)
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:
