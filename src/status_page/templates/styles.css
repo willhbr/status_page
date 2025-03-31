@@ -1,3 +1,7 @@
+:root {
+  color-scheme: light dark;
+}
+
 body {
   max-width: 55em;
   padding: 0.5em;
@@ -27,51 +31,26 @@ h1 a {
 }
 
 .trace {
-  color: #444;
+  color: light-dark(#444, #ccc);
 }
 .debug {
-  color: #308099;
+  color: light-dark(#308099, #80c8ed);
 }
 .info {
-  color: black;
+  color: light-dark(black, white);
 }
 .notice {
-  color #494211;
+  color light-dark(#494211, #f7f2d4);
 }
 .warn {
-  color: #b77203;
+  color: light-dark(#b77203, #f78c1b);
 }
 .error {
-  color: #a00901
+  color: light-dark(#a00901,  #e01c06);
 }
 .fatal {
-  background: #a00901;
+  background: light-dark(#a00901, #e01c06);
   color: white;
-}
-
-@media (prefers-color-scheme: dark) {
-  .trace {
-    color: #ccc;
-  }
-  .debug {
-    color: #80c8ed;
-  }
-  .info {
-    color: white;
-  }
-  .notice {
-    color: #f7f2d4
-  }
-  .warn {
-    color: #f78c1b;
-  }
-  .error {
-    color: #e01c06;
-  }
-  .fatal {
-    background: #e01c06;
-    color: white;
-  }
 }
 
 header {
@@ -89,17 +68,4 @@ header {
 
 table {
   width: 100%;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    color: white;
-    background: black;
-  }
-  a {
-    color: cornflowerblue;
-  }
-  a:hover, a:visited {
-    color: aqua;
-  }
 }
